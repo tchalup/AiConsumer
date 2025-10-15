@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/AiConsumer.Api.props" />
-</Project>
