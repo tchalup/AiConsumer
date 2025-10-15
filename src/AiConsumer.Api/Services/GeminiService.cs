@@ -22,7 +22,7 @@ namespace AiConsumer.Api.Services
         {
             var apiKey = _configuration["Gemini:ApiKey"];
             var baseUrl = _configuration["Gemini:BaseUrl"];
-            var requestUrl = $"{baseUrl}v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}";
+            var requestUrl = $"{baseUrl}v1beta/models/gemini-2.5-flash:generateContent";
 
             var requestBody = new GeminiRequest
             {
@@ -48,6 +48,7 @@ namespace AiConsumer.Api.Services
 
             var jsonBody = JsonSerializer.Serialize(requestBody);
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            content.Headers.Add("x-goog-api-key", $"{apiKey}");
 
             var response = await _httpClient.PostAsync(requestUrl, content);
 
