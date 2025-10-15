@@ -1,4 +1,5 @@
 using GeminiApi.Models;
+using GeminiApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace GeminiApi.Controllers
     public class FilesController : ControllerBase
     {
         private readonly ApiDbContext _context;
+        private readonly GeminiService _geminiService;
 
-        public FilesController(ApiDbContext context)
+        public FilesController(ApiDbContext context, GeminiService geminiService)
         {
             _context = context;
+            _geminiService = geminiService;
         }
 
         // POST: api/files
@@ -62,13 +65,16 @@ namespace GeminiApi.Controllers
             fileRecord.Prompt = request.Prompt;
             await _context.SaveChangesAsync();
 
-            // Aqui você enviaria o arquivo (fileRecord.Content) e o prompt (request.Prompt)
-            // para a API do Gemini. Como isso é uma simulação, vamos apenas retornar uma
-            // mensagem de sucesso.
-
-            var geminiResponse = $"Pergunta recebida para o arquivo '{fileRecord.FileName}' com o prompt: '{request.Prompt}'. O conteúdo do arquivo seria enviado ao Gemini.";
-
-            return Ok(geminiResponse);
+            try
+            {
+                var geminiResponse = await _geminiService.GenerateContentAsync(request.Prompt, fileRecord.Content, fileRecord.ContentType);
+                return Ok(geminiResponse);
+            }
+            catch (HttpRequestException ex)
+            {
+                // Log the exception details here
+                return StatusCode(500, $"An error occurred while calling the Gemini API: {ex.Message}");
+            }
         }
     }
 }

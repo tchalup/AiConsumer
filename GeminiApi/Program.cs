@@ -1,4 +1,5 @@
 using GeminiApi.Models;
+using GeminiApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApiDbContext>(opt =>
     opt.UseInMemoryDatabase("FileList"));
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<GeminiService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();

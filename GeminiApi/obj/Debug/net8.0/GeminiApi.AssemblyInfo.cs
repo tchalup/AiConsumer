@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GeminiApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66227049d559c93831db176b70182b23cfaf235d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d3f327618ed6cb82bb6808bf0105d0c8aedea34")]
 [assembly: System.Reflection.AssemblyProductAttribute("GeminiApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GeminiApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
