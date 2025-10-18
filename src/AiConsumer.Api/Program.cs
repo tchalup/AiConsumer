@@ -1,6 +1,7 @@
 using AiConsumer.Api.Models;
 using AiConsumer.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using GemiNet.Extensions.AI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApiDbContext>(opt =>
     opt.UseInMemoryDatabase("FileList"));
 
-builder.Services.AddHttpClient();
+builder.Services.AddGemiNetClient(builder.Configuration["Gemini:ApiKey"]);
 builder.Services.AddScoped<GeminiService>();
 
 builder.Services.AddEndpointsApiExplorer();

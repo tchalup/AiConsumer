@@ -1,69 +1,27 @@
-using System.Text;
-using System.Text.Json;
-using AiConsumer.Api.Dtos;
-using Microsoft.Extensions.Configuration;
-using System.Net.Http;
-using System.Threading.Tasks;
+using GemiNet.Extensions.AI;
+using Microsoft.Extensions.AI;
 
 namespace AiConsumer.Api.Services
 {
     public class GeminiService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
+        private readonly GemiNetClient _client;
 
-        public GeminiService(HttpClient httpClient, IConfiguration configuration)
+        public GeminiService(GemiNetClient client)
         {
-            _httpClient = httpClient;
-            _configuration = configuration;
+            _client = client;
         }
 
         public async Task<string> GenerateContentAsync(string prompt, byte[] fileContent, string mimeType)
         {
-            var apiKey = _configuration["Gemini:ApiKey"];
-            var baseUrl = _configuration["Gemini:BaseUrl"];
-            var requestUrl = $"{baseUrl}v1beta/models/gemini-2.5-flash:generateContent";
-
-            var requestBody = new GeminiRequest
+            var geminiPrompt = new ChatPrompt
             {
-                Contents = new List<Content>
-                {
-                    new Content
-                    {
-                        Parts = new List<Part>
-                        {
-                            new Part { Text = prompt },
-                            new Part
-                            {
-                                InlineData = new InlineData
-                                {
-                                    MimeType = mimeType,
-                                    Data = Convert.ToBase64String(fileContent)
-                                }
-                            }
-                        }
-                    }
-                }
+                new TextContent(prompt),
+                new ImageContent(fileContent, mimeType)
             };
 
-            var jsonBody = JsonSerializer.Serialize(requestBody);
-            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            content.Headers.Add("x-goog-api-key", $"{apiKey}");
-
-            var response = await _httpClient.PostAsync(requestUrl, content);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Error calling Gemini API: {response.StatusCode}, {errorContent}");
-            }
-
-            var responseJson = await response.Content.ReadAsStringAsync();
-            var geminiResponse = JsonSerializer.Deserialize<GeminiResponse>(responseJson);
-
-            // Extrai e retorna o texto da primeira parte do primeiro candidato.
-            // Adicione tratamento de erro mais robusto conforme necessário.
-            return geminiResponse?.Candidates.FirstOrDefault()?.Content.Parts.FirstOrDefault()?.Text ?? "No content returned.";
+            var response = await _client.GenerateTextAsync(geminiPrompt);
+            return response;
         }
     }
 }
