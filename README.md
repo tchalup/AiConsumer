@@ -5,6 +5,7 @@ Esta é uma API ASP.NET Core que permite aos usuários fazer upload de um arquiv
 ## Documentation
 
 - [Class Diagram](./docs/class-diagram.md)
+- [Sequence Diagram](./docs/sequence-diagram.md)
 
 ## Funcionalidades
 
