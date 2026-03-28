@@ -2,6 +2,11 @@
 
 Esta é uma API ASP.NET Core que permite aos usuários fazer upload de um arquivo e fazer perguntas sobre ele usando a API do Google Gemini.
 
+## Documentation
+
+- [Class Diagram](./docs/class-diagram.md)
+- [Sequence Diagram](./docs/sequence-diagram.md)
+
 ## Funcionalidades
 
 -   Faz upload de um arquivo e o armazena em um banco de dados em memória.
